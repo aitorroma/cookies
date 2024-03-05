@@ -1,1 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Cookie Consent Form</title>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://js.hcaptcha.com/1/api.js" async defer></script>
+<style>
+  .form-container {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    border-radius: 8px;
+  }
 
+  button[type="submit"] {
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="form-container bg-white shadow">
+    <form id="consent-form">
+      <div class="form-group">
+        <label for="urls">Website URLs (one per line, up to 30):</label>
+        <textarea id="urls" name="urls" class="form-control" required rows="10" placeholder="Enter up to 30 URLs, one per line, ensuring each starts with https://"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" class="form-control" required>
+      </div>
+      <div class="form-group">
+        <div class="custom-control custom-checkbox">
+          <input type="checkbox" class="custom-control-input" id="termsCheck" required>
+          <label class="custom-control-label" for="termsCheck">I agree with the <a href="https://www.sealmetrics.com/privacy-policy" target="_blank">Terms and Conditions</a></label>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="h-captcha" data-sitekey="your-site-key"></div>
+      </div>
+      <button type="submit" class="btn btn-primary">Send Data</button>
+    </form>
+  </div>
+</div>
+
+<script>
+  document.getElementById('consent-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    var urlData = document.getElementById('urls').value.trim().split('\n').slice(0, 30).map(url => `https://${url.trim().replace(/^(https?:\/\/)/, "")}`);
+    var email = document.getElementById('email').value.trim();
+
+    var formData = urlData.map(function(url) {
+      return { url: url, email: email };
+    });
+
+    fetch('https://webhook.nimboxtalk.chat/webhook/cookies-in', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({urls: formData})
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log('Success:', data);
+      alert('Data sent successfully');
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+      alert('An error occurred');
+    });
+  });
+</script>
+</body>
+</html>
