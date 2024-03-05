@@ -72,7 +72,7 @@
     .then(response => response.json())
     .then(data => {
       console.log('Success:', data);
-      alert('Data sent successfully');
+      window.location.href = 'https://sealmetrics.com/thank-you-consent-mode/'; // Esta es la línea agregada para la redirección
     })
     .catch((error) => {
       console.error('Error:', error);
