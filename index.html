@@ -71,9 +71,10 @@
     })
     .then(response => response.json())
     .then(data => {
-      console.log('Success:', data);
-      window.location.href = 'https://sealmetrics.com/thank-you-consent-mode/'; // Esta es la línea agregada para la redirección
-    })
+     console.log('Success:', data);
+     window.top.location.href = 'https://sealmetrics.com/thank-you-consent-mode/'; // Modificado para redirigir la página completa
+  })
+
     .catch((error) => {
       console.error('Error:', error);
       alert('An error occurred');
